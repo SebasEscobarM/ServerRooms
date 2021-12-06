@@ -1,7 +1,5 @@
 package ui;
 import java.util.*;
-//import java.io.*;
-//import java.net.*;
 import model.*;
 public class ServerRoomsSystem {
 	public static Scanner reader;
@@ -28,6 +26,9 @@ public class ServerRoomsSystem {
 			System.out.println("Select an option from the menu:");
 			System.out.println("1. Rent a room.");
 			System.out.println("2. Calcel a rent.");
+			System.out.println("3. Enter ON/OFF simulation mode.");
+			System.out.println("4. Show ON/OFF map.");
+			System.out.println("5. Show general map.");
 			System.out.println("9. Exit.");
 			menu=reader.nextInt();
 			reader.nextLine();
@@ -35,9 +36,13 @@ public class ServerRoomsSystem {
 			{
 				case 1:	rentRoom();
 						break;
-				case 2:
+				case 2:	cancelRent();
 						break;
-				case 3:
+				case 3:	onOffSimulation();
+						break;
+				case 4:	System.out.println(twr1.printOnMap());
+						break;
+				case 5: System.out.println(twr1.generalRoomsMap());
 						break;
 				case 9:	exit=true;
 						break;
@@ -130,7 +135,8 @@ public class ServerRoomsSystem {
 	}
 	public static void cancelRent()
 	{
-		int selection=0;
+		String message="";
+		int selection=0, confirm=0;
 		String roomNum="", nit="";
 		System.out.println("Select the cancel option that is going to be processed:");
 		System.out.println("1. Cancel an specific room.");
@@ -141,12 +147,90 @@ public class ServerRoomsSystem {
 		{
 			System.out.println("Enter the number of the room to eliminate:");
 			roomNum=reader.nextLine();
-			twr1.cancelRentRoom(roomNum);
+			System.out.print(twr1.showServersRoomCapacity(roomNum));
+			System.out.println("Select:");
+			System.out.println("1. Confirm.");
+			System.out.println("2. Cancel.");
+			confirm=reader.nextInt();
+			reader.nextLine();
+			if(confirm==1)
+				message=twr1.cancelRentRoom(roomNum);
+			else if(confirm==2)
+				message="Action cancelled.";
+			else
+				message="Select a correct option.";
 		}else if(selection==2)
 		{
 			System.out.println("Enter the NIT of the company:");
 			nit=reader.nextLine();
-			twr1.cancelRentCompany(nit);
+			System.out.print(twr1.showServersCompanyCapacity(nit));
+			System.out.println("Select:");
+			System.out.println("1. Confirm.");
+			System.out.println("2. Cancel.");
+			confirm=reader.nextInt();
+			reader.nextLine();
+			if(confirm==1)
+				message=twr1.cancelRentCompany(nit);
+			else if(confirm==2)
+				message="Action cancelled.";
+			else
+				message="Select a correct option.";
 		}
+		System.out.println(message);
+	}
+	public static void onOffSimulation()
+	{
+		boolean exit=false;
+		String offLetter="";
+		int colmn=-1, row=-1;
+		twr1.onAll();
+		do{
+			System.out.println(twr1.printOnMap());
+			System.out.println("Select a letter for turn off:");
+			System.out.println("| L | Z | H | O | M | P |");
+			System.out.println("Enter 'N' to turn on all the rooms.");
+			System.out.println("Enter 'E' for exit of the simulation mode.");
+			offLetter=reader.nextLine();
+			switch(offLetter)
+			{
+				case "L":
+				case "l":twr1.offL();
+						 break;
+				case "Z":
+				case "z":twr1.offZ();
+						 break;
+				case "H":
+				case "h":twr1.offH();
+						 break;
+				case "O":
+				case "o":twr1.offO();
+						 break;
+				case "M":
+				case "m":System.out.println("Enter the column num to turn off:");
+						 colmn=reader.nextInt();
+						 reader.nextLine();
+						 if(colmn>=1 && colmn<=twr1.ROOMS_PER_CORRIDOR)
+							 twr1.offM(colmn-1);
+						 else
+							 System.out.println("Select a valid column.");
+						 break;
+				case "P":
+				case "p":System.out.println("Enter the corridor num to turn off:");
+						 row=reader.nextInt();
+						 reader.nextLine();
+						 if(row>=1 && row<=twr1.CORRIDORS)
+							 twr1.offP(row-1);
+						 else
+							 System.out.println("Select a valid corridor.");
+						 break;
+				case "N":
+				case "n":twr1.onAll();
+						 break;
+				case "E":
+				case "e":twr1.exitSimulation();
+						 exit=true;
+						 break;
+			}
+		}while(!exit);
 	}
 }

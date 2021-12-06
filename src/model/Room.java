@@ -8,6 +8,7 @@ public class Room {
 	private double basicValue;
 	private double finalRentValue;
 	private Date rentDate;
+	private boolean on;
 	//Relations
 	private List<Server> roomServers;
 	private Company renter;
@@ -24,11 +25,13 @@ public class Room {
 	{
 		renter=new Company(name,nit);
 		rentDate=new Date();
+		setOn(true);
 	}
 	public void rent(String name, String nit, String projectNum)
 	{
 		renter=new Company(name,nit, projectNum);
 		rentDate=new Date();
+		setOn(true);
 	}
 	public void addServer(double cacheMemory, int processorsNum, ProcessorBrand processorBrand, int ramMemory, int diskNum, double[] disksCapacity)
 	{
@@ -42,6 +45,23 @@ public class Room {
 		rent*=serversAdditional;
 		setFinalRentValue(rent);
 		return rent;
+	}
+	public String toStringServer()
+	{
+		String message="";
+		for(int i=0;i<roomServers.size();i++)
+		{
+			message+="Server #"+(i+1)+"\nTotal disk capacity: "+roomServers.get(i).totalDiskCapacity()+"Tb.\nRAM memory: "+roomServers.get(i).getRamMemory()+"GB.\n";
+		}
+		return message;
+	}
+	public void cancelRent()
+	{
+		setRenter(null);
+		roomServers.clear();
+		setFinalRentValue(basicValue);
+		rentDate=null;
+		setOn(false);
 	}
 	public String getRoomNum() {
 		return roomNum;
@@ -73,4 +93,17 @@ public class Room {
 	public void setRenter(Company renter) {
 		this.renter = renter;
 	}
+	public Date getRentDate() {
+		return rentDate;
+	}
+	public void setRentDate(Date rentDate) {
+		this.rentDate = rentDate;
+	}
+	public boolean isOn() {
+		return on;
+	}
+	public void setOn(boolean on) {
+		this.on = on;
+	}
+	
 }

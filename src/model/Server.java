@@ -23,6 +23,15 @@ public class Server {
 			this.disksCapacity[i]=disksCapacity[i];
 		}
 	}
+	public double totalDiskCapacity()
+	{
+		double total=0;
+		for(int i=0;i<disksCapacity.length;i++)
+		{
+			total+=disksCapacity[i];
+		}
+		return total;
+	}
 	public double getCacheMemory()
 	{
 		return cacheMemory;
