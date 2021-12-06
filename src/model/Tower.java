@@ -353,9 +353,9 @@ public class Tower {
 	}
 	public void exitSimulation()
 	{
-		for(int i=0;i<CORRIDORS-1;i++)
+		for(int i=0;i<CORRIDORS;i++)
 		{
-			for(int j=0;j<ROOMS_PER_CORRIDOR-1;j++)
+			for(int j=0;j<ROOMS_PER_CORRIDOR;j++)
 			{
 				if(rooms[i][j]!=null)
 				{
